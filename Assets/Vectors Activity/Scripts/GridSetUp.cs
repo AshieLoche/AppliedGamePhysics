@@ -11,7 +11,7 @@ public class GridSetUp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        owo.par
+        //owo.par
     }
 
     private void SetGrid(float xPos, float zPos)
@@ -21,8 +21,8 @@ public class GridSetUp : MonoBehaviour
 
         foreach (Transform t in hehe)
         {
-            if (xPos >)
-                t.position = new Vector3(xPos, t.position.y, zPos);
+            //if (xPos >)
+            //    t.position = new Vector3(xPos, t.position.y, zPos);
 
         }
 
