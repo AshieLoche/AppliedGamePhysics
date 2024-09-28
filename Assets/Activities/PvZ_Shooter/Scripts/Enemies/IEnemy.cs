@@ -14,6 +14,6 @@ public interface IEnemy
     float PeripheralRange { get; }
 
     void OnDrawGizmos();
-    void Attak
+    void Attack();
 
 }
