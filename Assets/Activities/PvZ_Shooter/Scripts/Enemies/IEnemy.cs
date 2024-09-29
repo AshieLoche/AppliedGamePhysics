@@ -13,7 +13,7 @@ public interface IEnemy
     float SightRange { get; }
     float PeripheralRange { get; }
 
-    void OnDrawGizmos();
-    void Attack();
+    void RotateToPlayer();
+    //void Attack(string attackType);
 
 }
