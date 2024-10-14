@@ -6,6 +6,7 @@ public class ProjectileMotion : MonoBehaviour
     #region Attributes
     #region GameObjects and Components
     [Header("GameObjects and Components")]
+    [SerializeField] private Transform _originTF;
     [SerializeField] private Rigidbody _playerRB;
     [SerializeField] private GameObject _checkpoint1GO;
     [SerializeField] private Transform _midpointTF;
@@ -64,9 +65,10 @@ public class ProjectileMotion : MonoBehaviour
         //_fullProjectileStatus = false;
         //_horizontalSpeed = Mathf.Sqrt((-2 * _gravity * Mathf.Abs(_midpointPos.x - _playerPos.x))/Mathf.Sin());
 
-        _verticalSpeed = Mathf.Sqrt(-2 * _gravity * _verticalDisplacement);
+        //_verticalSpeed = Mathf.Sqrt(-2 * _gravity * _verticalDisplacement);
 
-        _playerRB.velocity = Vector3.right * _horizontalSpeed + Vector3.up * _verticalSpeed;
+        //_playerRB.velocity = Vector3.right * _horizontalSpeed + Vector3.up * _verticalSpeed;
+        _playerRB.velocity = _originTF.right * _horizontalSpeed;
     }
 
     [Button]
