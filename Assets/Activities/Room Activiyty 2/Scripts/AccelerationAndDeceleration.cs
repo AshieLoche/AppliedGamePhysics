@@ -84,6 +84,7 @@ public class AccelerationAndDeceleration : MonoBehaviour
         _accelerateDecelerateStatus = false;
 
         _playerRB.position = _playerPos;
+        _playerRB.velocity = Vector3.zero;
         _startingSpeed = _maxSpeed = _accelerationTime = _decelerationTime = _currentSpeed = _accelerationTimer = _decelerationTimer = 0f;
     }
     #endregion
@@ -107,7 +108,7 @@ public class AccelerationAndDeceleration : MonoBehaviour
     {
         _accelerationTime = (-_startingSpeed + Mathf.Sqrt(Mathf.Pow(_startingSpeed, 2) - (4f * (0.5f * _acceleration) * (_playerPos.x - _checkpoint1Pos.x)))) / (2f * 0.5f * _acceleration);
 
-        _decelerationTime = (-_maxSpeed + Mathf.Sqrt(Mathf.Pow(_maxSpeed, 2) - (4f * (0.5f * _deceleration) * (_checkpoint2Pos.x - _targetPos.x)))) / (2f * 0.5f * _deceleration);
+        _decelerationTime = _accelerationTime;
     }
 
     private void AccelerateDecelerate()
@@ -127,15 +128,12 @@ public class AccelerationAndDeceleration : MonoBehaviour
         {
             _playerRB.velocity = Vector3.right * _maxSpeed;
         }
-        else if (/*_decelerate*/ _playerRB.position.x >= _checkpoint2Pos.x && _playerRB.position.x < _targetPos.x)
+        else if (_playerRB.position.x >= _checkpoint2Pos.x && _playerRB.velocity.x > 0f)
         {
             _decelerationTimer += Time.fixedDeltaTime;
             _playerRB.velocity = Vector3.right * Mathf.Lerp(_maxSpeed, _startingSpeed, _decelerationTimer / ((_startingSpeed - _maxSpeed) / _deceleration));
         }
-        else if (/*_finish*/ _playerRB.position.x >= _targetPos.x)
-        {
-            _playerRB.velocity = Vector3.zero;
-        }
+
     }
     #endregion
     #endregion

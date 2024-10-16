@@ -27,10 +27,13 @@ public class ProjectileMotion : MonoBehaviour
 
     [Header("Horizontal Movement")]
     [SerializeField] private float _horizontalSpeed;
+    [SerializeField] private float _horizontalDisplacement;
+    [SerializeField] private float _horizontalTimer;
 
     [Header("Vertical Movement")]
+    [SerializeField] private float _maxHeight;
     [SerializeField] private float _verticalDisplacement;
-    [SerializeField] private float _verticalSpeed;
+    [SerializeField] private float _verticalTimer;
     [SerializeField] private const float _gravity = -9.8f;
     #endregion
 
@@ -48,12 +51,38 @@ public class ProjectileMotion : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //if (_accelerateDecelerate)
-        //{
-        //    AccelerateDecelerate();
-        //}
+        if (_halfProjectileStatus)
+        {
+            if (_playerRB.velocity.y == 0f && !_launch)
+            {
+                _launch = true;
+                _playerRB.velocity = Vector3.up * Mathf.Sqrt(-2 * _gravity * _maxHeight);
+            }
+            else if (_playerRB.velocity.y > 0f)
+            {
+                _verticalTimer += Time.fixedDeltaTime;
+                _horizontalDisplacement = _playerRB.position.y;
+            }
+            else if (_playerRB.velocity.y < 0f && !_peak)
+            {
+                _peak = true;
+                _playerRB.velocity = Vector3.right * _horizontalSpeed;
+            }
+            else if (_playerRB.velocity.y < 0f && _peak)
+            {
+                _horizontalTimer += Time.fixedDeltaTime;
+                _horizontalDisplacement = Mathf.Abs(_playerRB.position.x - _originTF.position.x);
+            }
+            else if (_playerRB.velocity.y == 0f && _peak)
+            {
+                _playerRB.velocity = Vector3.zero;
+            }
+        }
     }
     #endregion
+
+    bool _launch;
+    bool _peak;
 
     #region Method Buttons
     [Button]
@@ -61,14 +90,8 @@ public class ProjectileMotion : MonoBehaviour
     {
         SetUp();
 
-        //_halfProjectileStatus = true;
-        //_fullProjectileStatus = false;
-        //_horizontalSpeed = Mathf.Sqrt((-2 * _gravity * Mathf.Abs(_midpointPos.x - _playerPos.x))/Mathf.Sin());
-
-        //_verticalSpeed = Mathf.Sqrt(-2 * _gravity * _verticalDisplacement);
-
-        //_playerRB.velocity = Vector3.right * _horizontalSpeed + Vector3.up * _verticalSpeed;
-        _playerRB.velocity = _originTF.right * _horizontalSpeed;
+        _halfProjectileStatus = true;
+        _fullProjectileStatus = false;
     }
 
     [Button]
