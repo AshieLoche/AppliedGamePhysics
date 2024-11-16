@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ForceModes : MonoBehaviour
 {
 
+    private List<Rigidbody> _rbs;
     private float _force;
     private Rigidbody _rb;
-    private ForceMode _forceMode;
     private bool _running;
 
     private void Awake()
@@ -22,31 +23,43 @@ public class ForceModes : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        for (int i = 0; i < _rbs.Count; i++)
+        {
+            _rbs[i].AddForce(transform.up * _force, i switch
+            {
+                0 => ForceMode.Force,
+                1 => ForceMode.Acceleration,
+                2 => ForceMode.Impulse,
+                3 => ForceMode.VelocityChange,
+                _ => ForceMode.Force
+            });
+        }
+
+
         if (_running)
         {
-            if (name.Contains("(1)"))
+            if (name.Contains("Manual"))
             {
                 _rb.velocity += name switch
                 {
-                    "Force (1)" => transform.up * (_force * Time.deltaTime / _rb.mass),
-                    "Impulse (1)" => transform.up * (_force / _rb.mass),
-                    "Acceleration (1)" => transform.up * (_force * Time.deltaTime),
-                    "VelocityChange (1)" => transform.up * _force,
+                    "Force Manual" => transform.up * (_force * Time.deltaTime / _rb.mass),
+                    "Impulse Manual" => transform.up * (_force / _rb.mass),
+                    "Acceleration Manual" => transform.up * (_force * Time.deltaTime),
+                    "VelocityChange Manual" => transform.up * _force,
                     _ => Vector3.zero
                 };
             }
-            else
+            else if(name.Contains("Automatic"))
             {
-                _forceMode = name switch
+                _rb.AddForce(transform.up * _force, name switch
                 {
-                    "Force" => ForceMode.Force,
-                    "Impulse" => ForceMode.Impulse,
-                    "Acceleration" => ForceMode.Acceleration,
-                    "VelocityChange" => ForceMode.VelocityChange,
+                    "Force Automatic" => ForceMode.Force,
+                    "Impulse Automatic" => ForceMode.Impulse,
+                    "Acceleration Automatic" => ForceMode.Acceleration,
+                    "VelocityChange Automatic" => ForceMode.VelocityChange,
                     _ => ForceMode.Force
-                };
-
-                _rb.AddForce(transform.up * _force, _forceMode);
+                });
             }
         }
     }
